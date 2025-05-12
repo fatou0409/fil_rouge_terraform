@@ -9,7 +9,7 @@ pipeline {
         SONARQUBE_URL = "http://localhost:9000"
         SONARQUBE_TOKEN = credentials('fafa') // ID du token Jenkins
         PATH = "C:\\HashiCorp\\Terraform;${env.PATH}"
-        TF_VERSION = ' v1.11.4 on windows_amd64' // Remplace par la version de Terraform que tu utilises
+        TF_VERSION = 'v1.11.4' // Remplace par la version de Terraform que tu utilises
     }
 
     stages {
@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Build des images') {
+        stage('Build des images Docker') {
             steps {
                 bat 'docker build -t %BACKEND_IMAGE%:latest ./Backend-main/odc'
                 bat 'docker build -t %FRONTEND_IMAGE%:latest ./Frontend-main'

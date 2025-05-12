@@ -8,6 +8,7 @@ pipeline {
         MIGRATE_IMAGE = "${DOCKER_USER}/profilapp-migrate"
         SONARQUBE_URL = "http://localhost:9000"
         SONARQUBE_TOKEN = credentials('fafa') // ID du token Jenkins
+        PATH = "C:\\HashiCorp\\Terraform;${env.PATH}"
         TF_VERSION = ' v1.11.4 on windows_amd64' // Remplace par la version de Terraform que tu utilises
     }
 

@@ -15,7 +15,7 @@ pipeline {
         stage('Cloner le dépôt') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/fatou0409/projet_fil_rouge.git'
+                    url: 'https://github.com/fatou0409/fil_rouge_terraform.git'
             }
         }
 

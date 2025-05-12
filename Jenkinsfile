@@ -8,8 +8,7 @@ pipeline {
         MIGRATE_IMAGE = "${DOCKER_USER}/profilapp-migrate"
         SONARQUBE_URL = "http://localhost:9000"
         SONARQUBE_TOKEN = credentials('fafa') // ID du token Jenkins
-        PATH = "C:\\HashiCorp\\Terraform;${env.PATH}"
-        TF_VERSION = 'v1.11.4' // Remplace par la version de Terraform que tu utilises
+       PATH = "C:\\Users\\hp\\Desktop\\terraform_1.11.4_windows_amd64;${env.PATH}"
     }
 
     stages {
@@ -17,6 +16,14 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/fatou0409/fil_rouge_terraform.git'
+            }
+        }
+
+        stage('Vérifier Terraform') {
+            steps {
+                echo 'Vérification de la présence de Terraform...'
+                bat 'where terraform'
+                bat 'terraform -v'
             }
         }
 
@@ -30,31 +37,22 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                script {
-                    // Initialisation de Terraform
-                    echo "Initialisation de Terraform..."
-                    bat 'terraform init'
-                }
+                echo "Initialisation de Terraform..."
+                bat 'terraform init'
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                script {
-                    // Exécution du plan Terraform
-                    echo "Exécution du plan Terraform..."
-                    bat 'terraform plan -out=tfplan'
-                }
+                echo "Exécution du plan Terraform..."
+                bat 'terraform plan -out=tfplan'
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                script {
-                    // Appliquer le plan Terraform
-                    echo "Application du plan Terraform..."
-                    bat 'terraform apply -auto-approve tfplan'
-                }
+                echo "Application du plan Terraform..."
+                bat 'terraform apply -auto-approve tfplan'
             }
         }
 
@@ -64,10 +62,10 @@ pipeline {
                     echo "Analyse SonarQube du backend..."
                     withEnv(["SONAR_TOKEN=${SONARQUBE_TOKEN}"]) {
                         bat '''
-                            "C:\\Users\\hp\\Desktop\\SonarScanner\\sonar-scanner\\bin\\sonar-scanner.bat" ^ 
-                              -Dsonar.projectKey=backend ^ 
-                              -Dsonar.sources=. ^ 
-                              -Dsonar.host.url=%SONARQUBE_URL% ^ 
+                            "C:\\Users\\hp\\Desktop\\SonarScanner\\sonar-scanner\\bin\\sonar-scanner.bat" ^
+                              -Dsonar.projectKey=backend ^
+                              -Dsonar.sources=. ^
+                              -Dsonar.host.url=%SONARQUBE_URL% ^
                               -Dsonar.login=%SONAR_TOKEN%
                         '''
                     }
@@ -81,10 +79,10 @@ pipeline {
                     echo "Analyse SonarQube du frontend..."
                     withEnv(["SONAR_TOKEN=${SONARQUBE_TOKEN}"]) {
                         bat '''
-                            "C:\\Users\\hp\\Desktop\\SonarScanner\\sonar-scanner\\bin\\sonar-scanner.bat" ^ 
-                              -Dsonar.projectKey=frontend ^ 
-                              -Dsonar.sources=. ^ 
-                              -Dsonar.host.url=%SONARQUBE_URL% ^ 
+                            "C:\\Users\\hp\\Desktop\\SonarScanner\\sonar-scanner\\bin\\sonar-scanner.bat" ^
+                              -Dsonar.projectKey=frontend ^
+                              -Dsonar.sources=. ^
+                              -Dsonar.host.url=%SONARQUBE_URL% ^
                               -Dsonar.login=%SONAR_TOKEN%
                         '''
                     }
@@ -105,9 +103,9 @@ pipeline {
         stage('Déploiement local avec Docker Compose') {
             steps {
                 bat '''
-                    docker-compose down || true
-                    docker rm -f backend_app || true
-                    docker rm -f frontend_app || true
+                    docker-compose down || exit 0
+                    docker rm -f backend_app || exit 0
+                    docker rm -f frontend_app || exit 0
                     docker-compose pull
                     docker-compose up -d --build
                 '''

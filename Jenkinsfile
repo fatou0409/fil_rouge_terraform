@@ -39,7 +39,6 @@ pipeline {
             steps {
                 echo "Initialisation de Terraform..."
                 dir('terraform') {
-                    // Ajoute un fichier versions.tf si besoin
                     writeFile file: 'versions.tf', text: '''
 terraform {
   required_providers {
@@ -117,16 +116,24 @@ terraform {
             }
         }
 
-        stage('Déploiement local avec Docker Compose') {
+        // Suppression manuelle des anciens conteneurs si nécessaire
+        stage('Nettoyage des anciens conteneurs (optionnel)') {
             steps {
                 bat '''
-                    docker-compose down || exit 0
                     docker rm -f backend_app || exit 0
                     docker rm -f frontend_app || exit 0
-                    docker-compose pull
-                    docker-compose up -d --build
                 '''
             }
         }
+
+        /*
+        stage('Terraform Destroy (optionnel)') {
+            steps {
+                dir('terraform') {
+                    bat 'terraform destroy -auto-approve'
+                }
+            }
+        }
+        */
     }
 }

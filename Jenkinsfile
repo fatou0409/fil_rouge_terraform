@@ -35,26 +35,33 @@ pipeline {
             }
         }
 
-        stage('Terraform Init') {
+               stage('Terraform Init') {
             steps {
                 echo "Initialisation de Terraform..."
-                bat 'terraform init'
+                dir('terraform') { // <- Adapter ici si ton dossier est différent
+                    bat 'terraform init'
+                }
             }
         }
 
         stage('Terraform Plan') {
             steps {
                 echo "Exécution du plan Terraform..."
-                bat 'terraform plan -out=tfplan'
+                dir('terraform') {
+                    bat 'terraform plan -out=tfplan'
+                }
             }
         }
 
         stage('Terraform Apply') {
             steps {
                 echo "Application du plan Terraform..."
-                bat 'terraform apply -auto-approve tfplan'
+                dir('terraform') {
+                    bat 'terraform apply -auto-approve tfplan'
+                }
             }
         }
+
 
         stage("Analyse SonarQube - Backend") {
             steps {

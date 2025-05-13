@@ -7,8 +7,8 @@ pipeline {
         FRONTEND_IMAGE = "${DOCKER_USER}/profilapp-frontend"
         MIGRATE_IMAGE = "${DOCKER_USER}/profilapp-migrate"
         SONARQUBE_URL = "http://localhost:9000"
-        SONARQUBE_TOKEN = credentials('fafa') // ID du token Jenkins
-       PATH = "C:\\Users\\hp\\Desktop\\terraform_1.11.4_windows_amd64;${env.PATH}"
+        SONARQUBE_TOKEN = credentials('fafa') // Token Jenkins
+        PATH = "C:\\Users\\hp\\Desktop\\terraform_1.11.4_windows_amd64;${env.PATH}"
     }
 
     stages {
@@ -35,10 +35,21 @@ pipeline {
             }
         }
 
-               stage('Terraform Init') {
+        stage('Terraform Init') {
             steps {
                 echo "Initialisation de Terraform..."
-                dir('terraform') { // <- Adapter ici si ton dossier est différent
+                dir('terraform') {
+                    // Ajoute un fichier versions.tf si besoin
+                    writeFile file: 'versions.tf', text: '''
+terraform {
+  required_providers {
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0"
+    }
+  }
+}
+'''
                     bat 'terraform init'
                 }
             }
@@ -61,7 +72,6 @@ pipeline {
                 }
             }
         }
-
 
         stage("Analyse SonarQube - Backend") {
             steps {

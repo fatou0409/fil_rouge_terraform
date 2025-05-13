@@ -16,8 +16,8 @@ resource "docker_image" "frontend_image" {
   }
 }
 
-resource "docker_container" "backend_app" {
-  name  = "backend_app"
+resource "docker_container" "backend_app_new" {
+  name  = "backend_app_new"
   image = docker_image.backend_image.name
 
   ports {
@@ -26,13 +26,10 @@ resource "docker_container" "backend_app" {
   }
 
   depends_on = [docker_image.backend_image]
-
-  # Ajout pour forcer la suppression des conteneurs existants en cas de conflit
-  force_remove = true
 }
 
-resource "docker_container" "frontend_app" {
-  name  = "frontend_app"
+resource "docker_container" "frontend_app_new" {
+  name  = "frontend_app_new"
   image = docker_image.frontend_image.name
 
   ports {
@@ -41,7 +38,4 @@ resource "docker_container" "frontend_app" {
   }
 
   depends_on = [docker_image.frontend_image]
-
-  # Ajout pour forcer la suppression des conteneurs existants en cas de conflit
-  force_remove = true
 }

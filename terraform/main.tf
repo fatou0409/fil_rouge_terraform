@@ -22,7 +22,7 @@ resource "docker_container" "backend_app_new" {
 
   ports {
     internal = 8080
-    external = 8080
+    external = 8083  # Port modifié
   }
 
   depends_on = [docker_image.backend_image]
@@ -34,7 +34,7 @@ resource "docker_container" "frontend_app_new" {
 
   ports {
     internal = 80
-    external = 80
+    external = 8084  # Port modifié pour éviter les conflits
   }
 
   depends_on = [docker_image.frontend_image]

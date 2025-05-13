@@ -1,20 +1,5 @@
-terraform {
-  required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "~> 3.0"
-    }
-  }
-}
-
 provider "docker" {
-  host = "npipe:////./pipe/docker_engine" # Utilisé sous Windows avec Docker Desktop
-}
-
-variable "docker_user" {
-  description = "Nom d'utilisateur Docker Hub"
-  type        = string
-  default     = "fatou0409"
+  host = "npipe:////./pipe/docker_engine"
 }
 
 resource "docker_image" "backend_image" {

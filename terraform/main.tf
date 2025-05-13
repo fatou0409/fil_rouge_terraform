@@ -26,6 +26,9 @@ resource "docker_container" "backend_app" {
   }
 
   depends_on = [docker_image.backend_image]
+
+  # Ajout pour forcer la suppression des conteneurs existants en cas de conflit
+  force_remove = true
 }
 
 resource "docker_container" "frontend_app" {
@@ -38,4 +41,7 @@ resource "docker_container" "frontend_app" {
   }
 
   depends_on = [docker_image.frontend_image]
+
+  # Ajout pour forcer la suppression des conteneurs existants en cas de conflit
+  force_remove = true
 }

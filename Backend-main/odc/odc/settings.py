@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-x*u4xobocld2xgun42d2)uh0p3y15y-$e!q3f$3-v2b#mfj+gh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'odcdb',
         'USER': 'odc',
         'PASSWORD': 'odc123',
-        'HOST': 'database',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
